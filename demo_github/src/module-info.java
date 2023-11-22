@@ -5,5 +5,5 @@
  * @author richandr
  *
  */
-module emo1 {
+module demo_github {
 }
