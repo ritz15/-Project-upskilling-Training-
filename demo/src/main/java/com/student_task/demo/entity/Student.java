@@ -1,7 +1,9 @@
 package com.student_task.demo.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection="students")
 public class Student {
 
 	
@@ -10,6 +12,7 @@ public class Student {
 	private String name;
 	private int age;
 	private int salary;
+	
 	public int getId() {
 		return id;
 	}

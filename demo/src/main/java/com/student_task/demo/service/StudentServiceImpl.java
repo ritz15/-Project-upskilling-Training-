@@ -1,12 +1,14 @@
 package com.student_task.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.student_task.demo.entity.Student;
 import com.student_task.demo.repo.StudentRepo;
+import com.student_task.exception.StudentAlreadyExistsException;
 
 @Service
 public class StudentServiceImpl  implements StudentService {
@@ -15,8 +17,10 @@ public class StudentServiceImpl  implements StudentService {
 	private StudentRepo studentRepo;
 
 	@Override
-	public Student addStudent(Student student) {
+	public Student addStudent(Student student)  {
 		// TODO Auto-generated method stub
+		
+		
 		Student addedStudent = studentRepo.save(student);
 		return addedStudent;
 
@@ -40,6 +44,14 @@ public class StudentServiceImpl  implements StudentService {
 	public void deleteById(int id) {
 		// TODO Auto-generated method stub
 		studentRepo.deleteById(id);
+	}
+
+	@Override
+	public Optional<Student> getStudentById(int id) {
+		// TODO Auto-generated method stub
+		Optional<Student> studentObj=studentRepo.findById(id);
+		return studentObj;
+		
 	}
 	
 
