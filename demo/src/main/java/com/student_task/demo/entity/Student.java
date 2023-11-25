@@ -3,13 +3,20 @@ package com.student_task.demo.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 @Document(collection="students")
 public class Student {
 
 	
 	@Id
 	private int id;
+	@NotNull(message="please enter name")
 	private String name;
+	@Min(3)
+	@Max(25)
 	private int age;
 	private int salary;
 	

@@ -19,6 +19,8 @@ import com.student_task.demo.service.StudentService;
 import com.student_task.exception.StudentAlreadyExistsException;
 import com.student_task.exception.StudentDoesntExistException;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -29,7 +31,7 @@ public class StudentController {
 	private StudentService studentServ;
 	
 	@PostMapping("/add")
-	public ResponseEntity<Student> addStudent( @RequestBody  Student student) {  
+	public ResponseEntity<Student> addStudent( @RequestBody @Valid Student student) {  
 	 Student s = studentServ.addStudent(student);
 	return  new ResponseEntity<Student>(s,HttpStatus.CREATED);
 	}
@@ -37,11 +39,15 @@ public class StudentController {
 	@GetMapping("/")
 	public ResponseEntity <List<Student> >getstudents(){
 		List<Student> studentList =studentServ.getAllStudents();
+		if(studentList.size()<=0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		
 		return  new ResponseEntity <List<Student>> (studentList,HttpStatus.OK);
 		
 	}
 	@GetMapping ("/get/{id}")
-	public ResponseEntity<Optional<Student>> getStudentById(@PathVariable int id) {
+	public ResponseEntity<Optional<Student>> getStudentById(@PathVariable int id)  {
 		//return Optional.of(userServ.getUserById(id));
 		
 	Optional<Student> userObj=studentServ.getStudentById(id);
@@ -49,7 +55,7 @@ public class StudentController {
 		
 	} 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Void> update(  @PathVariable int id ,@RequestBody Student student) {
+	public ResponseEntity<Void> update( @Valid @PathVariable int id ,@RequestBody Student student)  {
 		studentServ.update(id,student);
 		return  new ResponseEntity<>(HttpStatus.OK);
 	} 
