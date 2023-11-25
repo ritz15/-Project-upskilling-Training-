@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.SpringbootRestfulwebservices.dto.UserDto;
 import com.example.SpringbootRestfulwebservices.entity.User;
+import com.example.SpringbootRestfulwebservices.exception.EmailAlreadyExistsException;
+import com.example.SpringbootRestfulwebservices.exception.ResourceNotfoundException;
 import com.example.SpringbootRestfulwebservices.mapper.AutoUserMapper;
 import com.example.SpringbootRestfulwebservices.mapper.UserMapper;
 import com.example.SpringbootRestfulwebservices.repository.UserRepository;
@@ -37,9 +39,13 @@ public class UserServiceImpl implements UserService {
 //				);
 //		User user = UserMapper.mapToUser(userDto);
 //		User user = modelMapper.map(userDto, User.class);
+		
+		Optional<User> optionalUser =userRepository.findByEmail(userDto.getEmail());
+		if(optionalUser.isPresent()) {
+			throw new EmailAlreadyExistsException("email already exists for user");
+		}
+		
 		User user = AutoUserMapper.MAPPER.mapToUser(userDto);
-
-
 		
 		User savedUser = userRepository.save(user) ;
 		
@@ -60,8 +66,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto getUserById(Long userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
-		User user =  optionalUser.get();
+		User user = userRepository.findById(userId).orElseThrow(
+			()-> new ResourceNotfoundException("User","id",userId)
+				);
+		//User user =  optionalUser.get();
 //		return UserMapper.mapToUserDto(user);
 //		return modelMapper.map(user, UserDto.class);
 		return AutoUserMapper.MAPPER.mapToUserDto(user);
@@ -84,7 +92,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto updateUser(UserDto user) {
-		User existingUser = userRepository.findById(user.getId()).get();
+		
+		User existingUser = userRepository.findById(user.getId()).orElseThrow(
+				()-> new ResourceNotfoundException("User","id",user.getId())
+				);
+		
 		existingUser.setFirstName(user.getFirstName());
 		existingUser.setLastName(user.getLastName());
 		existingUser.setEmail(user.getEmail());
@@ -98,6 +110,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUser(Long userId) {
+		User existingUser = userRepository.findById(userId).orElseThrow(
+				()-> new ResourceNotfoundException("User","id",userId )
+				);
+		
 		userRepository.deleteById(userId);
 		
 	}
