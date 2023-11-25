@@ -26,5 +26,6 @@ import lombok.Setter;
 	private String lastName;
 	@Column(nullable= false, unique=true)
 	private String email;
+	private String departmentCode;
 
 }

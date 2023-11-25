@@ -15,7 +15,7 @@ import net.upskilling.departmentservice.dto.DepartmentDto;
 import net.upskilling.departmentservice.service.DepartmentService;
 
 @RestController
-@RequestMapping("/api/departments")
+@RequestMapping("api/departments")
 @AllArgsConstructor
   public class DepartmentController {
 
