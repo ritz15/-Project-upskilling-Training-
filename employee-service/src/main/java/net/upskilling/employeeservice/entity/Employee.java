@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -27,5 +29,6 @@ import lombok.Setter;
 	@Column(nullable= false, unique=true)
 	private String email;
 	private String departmentCode;
+	private String organizationCode;
 
 }
